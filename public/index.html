@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>育児休業受給資格チェッカー</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 py-8">
+    <div class="container mx-auto px-4 max-w-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">育児休業受給資格チェッカー</h1>
+            <p class="text-gray-600">日本の育児休業受給資格を確認できます</p>
+        </div>
+
+        <form id="eligibilityForm" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">出産予定日</label>
+                <input type="date" id="expectedBirthDate" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">雇用形態</label>
+                <select id="employmentType" class="w-full p-2 border border-gray-300 rounded-md">
+                    <option value="full-time">正社員</option>
+                    <option value="contract">契約社員</option>
+                    <option value="part-time">パート</option>
+                    <option value="temp">派遣</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">就労開始日</label>
+                <input type="date" id="employmentStartDate" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <div id="contractEndDiv" style="display: none;">
+                <label class="block text-sm font-medium text-gray-700 mb-2">契約終了日</label>
+                <input type="date" id="contractEndDate" class="w-full p-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">週の勤務日数</label>
+                <input type="number" id="weeklyWorkDays" min="1" max="7" value="5" class="w-full p-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="enrolledInEmploymentInsurance" checked class="rounded">
+                    <span class="text-sm font-medium text-gray-700">雇用保険に加入している</span>
+                </label>
+            </div>
+
+            <div>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="planningToWorkDuringLeave" class="rounded">
+                    <span class="text-sm font-medium text-gray-700">育児休業中に就労予定</span>
+                </label>
+            </div>
+
+            <div>
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="partnerTakingLeave" class="rounded">
+                    <span class="text-sm font-medium text-gray-700">パートナーも育児休業取得予定</span>
+                </label>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                受給資格を確認
+            </button>
+        </form>
+
+        <div id="result" class="mt-6" style="display: none;">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div id="eligibilityStatus" class="p-4 rounded-lg mb-4 border">
+                    <h3 id="statusTitle" class="text-lg font-semibold"></h3>
+                    <p id="statusMessage" class="mt-2"></p>
+                </div>
+                <div id="advice" class="mt-4">
+                    <h4 class="font-medium text-gray-700 mb-2">アドバイス</h4>
+                    <ul id="adviceList" class="space-y-1"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('employmentType').addEventListener('change', function() {
+            const contractDiv = document.getElementById('contractEndDiv');
+            if (this.value === 'contract' || this.value === 'temp') {
+                contractDiv.style.display = 'block';
+            } else {
+                contractDiv.style.display = 'none';
+            }
+        });
+
+        document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                expectedBirthDate: document.getElementById('expectedBirthDate').value,
+                employmentType: document.getElementById('employmentType').value,
+                employmentStartDate: document.getElementById('employmentStartDate').value,
+                contractEndDate: document.getElementById('contractEndDate').value,
+                weeklyWorkDays: parseInt(document.getElementById('weeklyWorkDays').value),
+                enrolledInEmploymentInsurance: document.getElementById('enrolledInEmploymentInsurance').checked,
+                planningToWorkDuringLeave: document.getElementById('planningToWorkDuringLeave').checked,
+                partnerTakingLeave: document.getElementById('partnerTakingLeave').checked
+            };
+
+            const result = calculateEligibility(formData);
+            displayResult(result);
+        });
+
+        function calculateEligibility(data) {
+            const birthDate = new Date(data.expectedBirthDate);
+            const employmentStartDate = new Date(data.employmentStartDate);
+            const contractEndDate = data.contractEndDate ? new Date(data.contractEndDate) : null;
+
+            const childOneHalfYearBirthday = new Date(birthDate);
+            childOneHalfYearBirthday.setMonth(birthDate.getMonth() + 18);
+
+            const employmentContinuesBeyondOneHalfYears = 
+                !contractEndDate || contractEndDate > childOneHalfYearBirthday;
+
+            const employmentDurationAtBirth = birthDate.getTime() - employmentStartDate.getTime();
+            const oneYearInMs = 365 * 24 * 60 * 60 * 1000;
+            const employmentPeriodExceedsOneYear = employmentDurationAtBirth >= oneYearInMs;
+
+            const weeklyWorkDaysLessThanThree = data.weeklyWorkDays < 3;
+
+            const coreConditions = [
+                data.enrolledInEmploymentInsurance,
+                employmentPeriodExceedsOneYear,
+                employmentContinuesBeyondOneHalfYears,
+                !weeklyWorkDaysLessThanThree
+            ];
+
+            const isEligible = coreConditions.every(condition => condition);
+
+            const advice = [];
+            if (!data.enrolledInEmploymentInsurance) {
+                advice.push('雇用保険に加入している必要があります');
+            }
+            if (!employmentPeriodExceedsOneYear) {
+                advice.push('出産予定日までに1年以上の雇用期間が必要です');
+            }
+            if (!employmentContinuesBeyondOneHalfYears) {
+                advice.push('子が1歳半を超えても雇用が継続する見込みが必要です');
+            }
+            if (weeklyWorkDaysLessThanThree) {
+                advice.push('週3日以上の勤務が必要です');
+            }
+            if (isEligible) {
+                advice.push('受給資格があります！申請は予定日の1ヶ月前までに行ってください');
+            }
+
+            return {
+                isEligible,
+                message: isEligible ? '育児休業給付金の受給資格があります' : '現在の条件では受給資格がありません',
+                advice
+            };
+        }
+
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            const statusDiv = document.getElementById('eligibilityStatus');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusMessage = document.getElementById('statusMessage');
+            const adviceList = document.getElementById('adviceList');
+
+            if (result.isEligible) {
+                statusDiv.className = 'p-4 rounded-lg mb-4 border bg-green-100 border-green-500';
+                statusTitle.className = 'text-lg font-semibold text-green-800';
+                statusTitle.textContent = '✓ 受給資格あり';
+                statusMessage.className = 'text-green-700 mt-2';
+            } else {
+                statusDiv.className = 'p-4 rounded-lg mb-4 border bg-red-100 border-red-500';
+                statusTitle.className = 'text-lg font-semibold text-red-800';
+                statusTitle.textContent = '✗ 受給資格なし';
+                statusMessage.className = 'text-red-700 mt-2';
+            }
+
+            statusMessage.textContent = result.message;
+
+            adviceList.innerHTML = '';
+            result.advice.forEach(advice => {
+                const li = document.createElement('li');
+                li.className = 'text-gray-600 flex items-start';
+                li.innerHTML = `<span class="mr-2 text-blue-500">•</span>${advice}`;
+                adviceList.appendChild(li);
+            });
+
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
