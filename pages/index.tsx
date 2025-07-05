@@ -24,6 +24,27 @@ export default function Home() {
         <meta name="description" content="Check your eligibility for childcare leave (育児休業) in Japan" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        
+        {/* OGP Meta Tags */}
+        <meta property="og:title" content="育児休業受給資格チェッカー - Japan Childcare Leave Eligibility Checker" />
+        <meta property="og:description" content="日本の育児休業受給資格を簡単にチェックできるWebアプリケーション。出産予定日や雇用形態に基づいて資格を判定します。" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://parental-leave-checker.vercel.app" />
+        <meta property="og:image" content="https://parental-leave-checker.vercel.app/og-image.svg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="育児休業受給資格チェッカー" />
+        <meta property="og:locale" content="ja_JP" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="育児休業受給資格チェッカー - Japan Childcare Leave Eligibility Checker" />
+        <meta name="twitter:description" content="日本の育児休業受給資格を簡単にチェックできるWebアプリケーション。出産予定日や雇用形態に基づいて資格を判定します。" />
+        <meta name="twitter:image" content="https://parental-leave-checker.vercel.app/og-image.svg" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="keywords" content="育児休業,育休,受給資格,日本,労働法,雇用保険,出産,子育て,childcare leave,parental leave,japan" />
+        <meta name="author" content="Parental Leave Checker" />
       </Head>
       
       <main className="min-h-screen bg-gray-100 py-8">
