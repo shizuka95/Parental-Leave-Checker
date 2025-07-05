@@ -20,8 +20,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Childcare Leave Eligibility Checker - Japan</title>
-        <meta name="description" content="Check your eligibility for childcare leave (育児休業) in Japan" />
+        <title>育児休業受給資格チェッカー</title>
+        <meta name="description" content="日本の育児休業受給資格を簡単にチェックできるWebアプリケーション" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         
@@ -51,10 +51,10 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-2xl">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              Childcare Leave Eligibility Checker
+              育児休業受給資格チェッカー
             </h1>
             <p className="text-gray-600">
-              Check if you're eligible for childcare leave (育児休業) in Japan
+              日本の育児休業受給資格を簡単にチェックできます
             </p>
           </div>
 
@@ -68,19 +68,19 @@ export default function Home() {
                   onClick={handleReset}
                   className="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
                 >
-                  Check Again
+                  再度チェック
                 </button>
               </div>
             </>
           )}
 
           <div className="mt-8 bg-blue-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-blue-800 mb-2">Important Notes:</h3>
+            <h3 className="font-semibold text-blue-800 mb-2">重要事項:</h3>
             <ul className="text-blue-700 text-sm space-y-1">
-              <li>• This tool provides guidance based on general Japanese labor law requirements</li>
-              <li>• Always consult with your HR department for company-specific policies</li>
-              <li>• Individual circumstances may affect eligibility</li>
-              <li>• Submit your application at least 1 month before your intended start date</li>
+              <li>• このツールは一般的な日本の労働法に基づいた判定を行います</li>
+              <li>• 実際の申請時は所属企業の人事部門にご相談ください</li>
+              <li>• 個別の事情により結果が異なる場合があります</li>
+              <li>• 申請は取得開始予定日の1ヶ月前までに行ってください</li>
             </ul>
           </div>
         </div>

@@ -23,19 +23,19 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
     const newErrors: FormErrors = {};
 
     if (!formData.expectedBirthDate) {
-      newErrors.expectedBirthDate = 'Expected birth date is required';
+      newErrors.expectedBirthDate = '出産予定日を入力してください';
     }
 
     if (!formData.employmentStartDate) {
-      newErrors.employmentStartDate = 'Employment start date is required';
+      newErrors.employmentStartDate = '雇用開始日を入力してください';
     }
 
     if ((formData.employmentType === 'contract' || formData.employmentType === 'temp') && !formData.contractEndDate) {
-      newErrors.contractEndDate = 'Contract end date is required for contract/temp employment';
+      newErrors.contractEndDate = '契約・派遣雇用の場合、契約終了日の入力が必要です';
     }
 
     if (formData.weeklyWorkDays < 1 || formData.weeklyWorkDays > 7) {
-      newErrors.weeklyWorkDays = 'Weekly work days must be between 1 and 7';
+      newErrors.weeklyWorkDays = '週労働日数は1〜7日の間で入力してください';
     }
 
     setErrors(newErrors);
@@ -65,11 +65,11 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Childcare Leave Eligibility Check</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">育児休業受給資格チェック</h2>
       
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Expected Birth Date
+          出産予定日
         </label>
         <input
           type="date"
@@ -84,23 +84,23 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Employment Type
+          雇用形態
         </label>
         <select
           value={formData.employmentType}
           onChange={(e) => handleChange('employmentType', e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md"
         >
-          <option value="full-time">Full-time</option>
-          <option value="contract">Contract</option>
-          <option value="part-time">Part-time</option>
-          <option value="temp">Temporary</option>
+          <option value="full-time">正社員</option>
+          <option value="contract">契約社員</option>
+          <option value="part-time">パート・アルバイト</option>
+          <option value="temp">派遣社員</option>
         </select>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Employment Start Date
+          雇用開始日
         </label>
         <input
           type="date"
@@ -116,7 +116,7 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
       {(formData.employmentType === 'contract' || formData.employmentType === 'temp') && (
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Contract End Date
+            契約終了日
           </label>
           <input
             type="date"
@@ -132,7 +132,7 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Weekly Work Days
+          週労働日数
         </label>
         <input
           type="number"
@@ -156,7 +156,7 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
             className="rounded"
           />
           <span className="text-sm font-medium text-gray-700">
-            Enrolled in employment insurance
+            雇用保険に加入している
           </span>
         </label>
       </div>
@@ -170,7 +170,7 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
             className="rounded"
           />
           <span className="text-sm font-medium text-gray-700">
-            Planning to work during childcare leave
+            育児休業中に就労を予定している
           </span>
         </label>
       </div>
@@ -184,7 +184,7 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
             className="rounded"
           />
           <span className="text-sm font-medium text-gray-700">
-            Partner is also taking childcare leave
+            配偶者も育児休業を取得する
           </span>
         </label>
       </div>
@@ -193,7 +193,7 @@ export const EligibilityForm: React.FC<EligibilityFormProps> = ({ onSubmit }) =>
         type="submit"
         className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
       >
-        Check Eligibility
+        受給資格をチェック
       </button>
     </form>
   );

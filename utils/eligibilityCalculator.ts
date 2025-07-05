@@ -38,40 +38,40 @@ export const calculateEligibility = (data: FormData): EligibilityResult => {
   const advice: string[] = [];
   
   if (!data.enrolledInEmploymentInsurance) {
-    advice.push('You must be enrolled in employment insurance to be eligible for childcare leave benefits.');
+    advice.push('育児休業給付を受けるためには雇用保険に加入している必要があります。');
   }
 
   if (!employmentPeriodExceedsOneYear) {
-    advice.push('You must have been employed for at least 1 year before the expected birth date.');
+    advice.push('出産予定日までに最低1年以上の雇用期間が必要です。');
   }
 
   if (!employmentContinuesBeyondOneHalfYears) {
-    advice.push('Your employment contract must continue beyond your child\'s 1.5-year birthday.');
+    advice.push('お子さまの1歳半を超えても雇用が継続する必要があります。');
   }
 
   if (weeklyWorkDaysLessThanThree) {
-    advice.push('You must work at least 3 days per week to be eligible.');
+    advice.push('受給資格を得るためには週、3日以上勤務する必要があります。');
   }
 
   if (data.planningToWorkDuringLeave) {
-    advice.push('Working during childcare leave may affect your benefits. Please consult with your HR department.');
+    advice.push('育児休業中の就労は給付に影響する場合があります。人事部門にご相談ください。');
   }
 
   if (data.partnerTakingLeave) {
-    advice.push('Both parents taking leave may extend the total leave period. Consider coordinating your leave schedules.');
+    advice.push('両親が育児休業を取得する場合、合計休業期間1年、2か月まで取得できます。休業スケジュールを調整してください。');
   }
 
   if (isEligible) {
-    advice.push('Congratulations! You appear to be eligible for childcare leave.');
-    advice.push('Please submit your application at least 1 month before your intended start date.');
+    advice.push('おめでとうございます！育児休業給付の受給資格があります。');
+    advice.push('申請は取得開始予定日の1か月前までに提出してください。');
   }
 
   // Generate result message
   let message = '';
   if (isEligible) {
-    message = 'You are eligible for childcare leave (育児休業) in Japan.';
+    message = '日本の育児休業給付の受給資格があります。';
   } else {
-    message = 'Based on the information provided, you may not be eligible for childcare leave.';
+    message = '入力いただいた情報に基づくと、育児休業給付の受給資格がない可能性があります。';
   }
 
   return {
